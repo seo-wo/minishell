@@ -6,7 +6,7 @@
 #    By: seowokim <seowokim@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/05 15:37:26 by seowokim          #+#    #+#              #
-#    Updated: 2022/12/05 16:40:45 by seowokim         ###   ########seoul.kr   #
+#    Updated: 2022/12/05 17:36:18 by seowokim         ###   ########seoul.kr   #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,12 +28,20 @@ CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 RMDIR = rm -rf
 
+LIBFT = -L./libft/ -lft
+LIBDIR = ./libft
+
+RED = \033[0;31m
+BLUE = \033[0;34m
+YELLOW = \033[0;33m
+
 all : $(NAME)
 
 $(NAME) : $(OBJS)
-	@echo "\033[0;34m====Compiling :\033[0;33m" $@ "\033[0;34m===="
-	@$(CC) $(CFLAGS) -I $(HEADER_DIR) $(OBJS) -o $@
-	@echo "\033[0;33m" $@ "HAS BEEN CREATED"
+	@echo "\t$(BLUE)Compiling :$(YELLOW) $@"
+	@$(MAKE) -C $(LIBDIR)
+	@$(CC) $(CFLAGS) -I $(HEADER_DIR) $(OBJS) -o $@ $(LIBFT)
+	@echo "\t$(YELLOW)$@ $(BLUE)HAS BEEN CREATED"
 
 
 $(OBJS_DIR)/%.o : %.c
@@ -41,11 +49,13 @@ $(OBJS_DIR)/%.o : %.c
 	@$(CC) $(CFLAGS) -I $(HEADER_DIR) -c $< -o $@
 
 clean :
-	@echo "\033[0;31mREMOVE OBJECTIVE FILES"
+	@echo "$(RED)REMOVE OBJECTIVE FILES"
+	@$(MAKE) -C $(LIBDIR) clean
 	@$(RMDIR) $(OBJS_DIR)
 
 fclean : clean
-	@echo "\033[0;31mREMOVE $(NAME)"
+	@$(MAKE) -C $(LIBDIR) fclean
+	@echo "REMOVE $(NAME)"
 	@$(RM) $(NAME)
 
 re : fclean all
